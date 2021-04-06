@@ -1,24 +1,24 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'My Site',
-  tagline: 'The tagline of my site',
+  title: 'SDKs documentation',
+  tagline: 'Your critical processes are reliable, simple and efficient',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  favicon: 'img/logo.jpg',
+  organizationName: 'Stratumn', // Usually your GitHub org/user name.
+  projectName: 'sdks-documentation', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'SDKs documentation',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Stratumn',
+        src: 'img/logo.jpg',
       },
       items: [
         {
-          to: 'docs/markdown-features',
+          to: 'docs/installation',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
@@ -32,39 +32,38 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Getting Started',
-              to: 'docs/markdown-features',
+              label: '📡 Installing',
+              to: 'docs/installation',
+            },
+            {
+              label: '🚀 Usage and Getting Started',
+              to: 'docs/configuration',
+            },
+            {
+              label: '💾 Handling files',
+              to: 'docs/handling-files',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'SDKs',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'JavaScript',
+              href: 'https://github.com/stratumn/sdk-js',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'C#',
+              href: 'https://github.com/stratumn/sdk-csharp',
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'Java',
+              href: 'https://github.com/stratumn/sdk-java',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Stratumn, Inc.`,
     },
   },
   presets: [
@@ -75,13 +74,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/stratumn/sdks-documentation',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/stratumn/sdks-documentation/edit/master/website/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

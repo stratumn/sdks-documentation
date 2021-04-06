@@ -1,0 +1,59 @@
+---
+title: 📡 Installing
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+- In Node.js
+
+The preferred way to install the Stratumn SDK for Node.js is to use the
+[yarn](http://yarnpkg.com) package manager for Node.js. Simply type the following
+into a terminal window:
+
+```sh
+yarn add @stratumn/sdk
+```
+
+</TabItem>
+<TabItem value="csharp">
+
+- Using NuGet console manager
+
+The preferred way to install the Stratumn SDK is to use the
+[NuGet](https://www.nuget.org) package manager. Simply type the following
+into a NuGet console window :
+
+```sh
+Install-Package Stratumn.SDK
+```
+
+</TabItem>
+<TabItem value="java">
+
+Required version : Java >= 8
+
+- Maven
+
+```xml
+<dependency>
+<groupId>com.stratumn</groupId>
+<artifactId>sdk</artifactId>
+<version>0.2.1</version>
+</dependency>
+```
+
+</TabItem>
+</Tabs>

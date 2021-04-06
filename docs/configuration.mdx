@@ -1,0 +1,752 @@
+---
+title: 🚀 Usage and Getting Started
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+### Configuration
+
+You will need to provide:
+
+- a valid workflow id that has been created via [Trace](https://trace.stratumn.com).
+- a secret that will be used to authenticate via [Account](https://account.stratumn.com)
+
+The authentication secret can be one of the following:
+
+- a `CredentialSecret` object containing the email and password of the account
+- a `PrivateKeySecret` object containing the signing private key of the account
+
+Notes:
+
+- You can find the workflow id in the url of your workflow. For example, when looking at `https://trace.stratumn.com/workflow/95572258`, the id is `95572258`.
+- When a `PrivateKeySecret` is provided, a unique message is generated, signed and sent to [Account](https://account.stratumn.com) for validation. We check that the signature and the message are valid and return an authentication token in that case.
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+  You must start by importing the `Sdk` class definition:
+
+```js
+var { Sdk } = require("@stratumn/sdk");
+```
+
+You can then create a new instance of the `Sdk`:
+
+```js
+var sdk = new Sdk({
+  workflowId: YOUR_CONFIG.workflowId,
+  secret: { privateKey: YOUR_SECRETS.privateKey },
+});
+```
+
+By default the `Sdk` is configured to point to the production environment of Trace. During a development phase, you can configure the `Sdk` to point to the staging environment:
+
+```js
+var sdk = new Sdk({
+  workflowId: YOUR_CONFIG.workflowId,
+  secret: { privateKey: YOUR_SECRETS.privateKey },
+  endpoints: {
+    trace: "https://trace-api.staging.stratumn.com",
+    account: "https://account-api.staging.stratumn.com",
+    media: "https://media-api.staging.stratumn.com",
+  },
+});
+```
+
+</TabItem>
+<TabItem value="csharp">
+
+You must start by importing the `Sdk` class definition:
+
+```cs
+using Stratumn.Sdk
+```
+
+You can then create a new instance of the `Sdk`:
+
+```cs
+  Secret s = Secret.NewPrivateKeySecret(YOUR_SECRETS.privateKey);
+  SdkOptions opts = new SdkOptions(YOUR_CONFIG.workflowId, s);
+```
+
+- By default the `Sdk` is configured to point to the production environment of Trace. During a development phase, you can configure the `Sdk` to point to the staging environment:
+
+```cs
+Secret s = Secret.NewPrivateKeySecret(YOUR_SECRETS.privateKey);
+SdkOptions opts = new SdkOptions(YOUR_CONFIG.workflowId, s);
+opts.Endpoints = new Endpoints {
+  Trace = "https://trace-api.staging.stratumn.com",
+  Account = "https://account-api.staging.stratumn.com",
+  Media = "https://media-api.staging.stratumn.com",
+};
+```
+
+- To enable low level http debuging set the enableDebugging option to true;
+
+```cs
+opts.setEnableDebuging(true);
+```
+
+- To connect through a proxy server:
+
+```cs
+opts.setProxy("MyProxyHost", 1234);
+```
+
+Finally to create the sdk instance:
+
+```cs
+Sdk<MyStateType> sdk = new Sdk<MyStateType>(opts, MyStateType.class);
+```
+
+</TabItem>
+<TabItem value="java">
+
+You must start by importing the `Sdk` class:
+
+```java
+import com.stratumn.sdk.Sdk;
+```
+
+You can then create a new instance of the `Sdk`:
+
+```java
+  Secret s = Secret.newPrivateKeySecret(YOUR_SECRETS.privateKey);
+  SdkOptions opts = new SdkOptions(YOUR_CONFIG.workflowId, s);
+```
+
+- By default the `Sdk` is configured to point to the production environment of Trace. During a development phase, you can configure the `Sdk` to point to the staging environment:
+
+```java
+Secret s = Secret.NewPrivateKeySecret(YOUR_SECRETS.privateKey);
+SdkOptions opts = new SdkOptions(YOUR_CONFIG.workflowId, s);
+opts.setEndpoints(new Endpoints("https://account-api.staging.stratumn.com", "https://trace-api.staging.stratumn.com", "https://media-api.staging.stratumn.com"));
+```
+
+- To enable low level http debuging set the enableDebugging option to true;
+
+```java
+opts.setEnableDebuging(true);
+```
+
+- To connect through a proxy server:
+
+```java
+opts.setProxy("MyProxyHost", 1234);
+```
+
+Finally to create the sdk instance:
+
+```java
+Sdk<MyStateType> sdk = new Sdk<MyStateType>(opts, MyStateType.class);
+```
+
+</TabItem>
+</Tabs>
+
+### Creating a new trace
+
+You can create a new trace this way:
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+let myFirstTrace = await sdk.newTrace({
+  actionKey: YOUR_CONFIG.actionNewShipment,
+  data: {
+    operation: "new shipment XYZ for ABC",
+    weight: 123,
+    valid: true,
+    operators: ["Ludovic K.", "Bernard Q."],
+  },
+});
+```
+
+- Note that the return type of `sdk.newTrace` is `Promise<TraceState>` since this operation is asynchronous. You must `await` for the response in order to effectively use it.
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```cs
+IDictionary<string, object> data = new Dictionary<string, object> {
+  ["weight"] = "123",
+  ["valid"] = true,
+  ["operators"] = new string[] { "1", "2" },
+  ["operation"] = "my new operation 1"
+};
+NewTraceInput<object> input = new NewTraceInput<object>(YOUR_CONFIG.actionKey, data);
+TraceState<object, object> myFirstTrace = await sdk.NewTraceAsync<object>(input);
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+ Map<String, Object> data = new HashMap<String, Object>();
+ data.put("weight", "123");
+ data.put("valid", true);
+ data.put("operators", new String[]{"1", "2" });
+ data.put("operation", "my new operation 1");
+ NewTraceInput<Object> newTraceInput = new
+ NewTraceInput<Object>(YOUR_CONFIG.actionKey, data);
+ TraceState<Object, Object> state = sdk.newTrace(newTraceInput);
+```
+
+</TabItem>
+
+</Tabs>
+
+You must provide:
+
+- `actionKey`: a valid action key,
+- `data`: the data object corresponding to the action being done.
+
+The Sdk will return an object corresponding to the "state" of your new trace. This state exposes the following fields:
+
+- `traceId`: the id (uuid format) which uniquely identify the newly created trace,
+- `headLink`: the link that was last appended to the trace,
+- `updatedAt`: the `Date` at which the trace was last updated,
+- `updatedBy`: the id of the user who last updated the trace,
+- `data`: the aggregated data modelling the state the trace is in.
+
+Notes:
+
+- The `data` object argument must be valid against the JSON schema of the form you are using, otherwise Trace will throw a validation error.
+
+### Appending a link to an existing trace
+
+Assuming you have access to the head link of the trace you wish to append a link to (in this example it is `myFirstTrace.headLink`), you can proceed this way:
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+await sdk.appendLink({
+  prevLink: myFirstTrace.headLink,
+  actionKey: YOUR_CONFIG.actionDeparture,
+  data: {
+    operation: "XYZ shipment departed port for ABC",
+    destination: "ABC",
+    customsCheck: true,
+    eta: "2019-07-02T12:00:00.000Z",
+  },
+});
+```
+
+If you don't have access to the head link, you can also provide the trace id:
+
+```js
+await sdk.appendLink({
+  traceId: someTraceId,
+  actionKey: YOUR_CONFIG.actionDeparture,
+  data: {
+    ...
+  }
+});
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```cs
+AppendLinkInput<object> appLinkInput = new AppendLinkInput<object>(YOUR_CONFIG.actionKey, data, prevLink);
+TraceState<object, object> state = await GetSdk().AppendLinkAsync(appLinkInput);
+```
+
+If you don't have access to the head link, you can also provide the trace id:
+
+```cs
+AppendLinkInput<object> appLinkInput = new AppendLinkInput<object>(YOUR_CONFIG.actionKey, data, traceId);
+TraceState<object, object> state = await GetSdk().AppendLinkAsync(appLinkInput);
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+AppendLinkInput<Object> appLinkInput = new AppendLinkInput<Object>(YOUR_CONFIG.actionKey, data, prevLink);
+TraceState<Object, Object> state =   sdk.appendLink(appLinkInput);
+
+```
+
+If you don't have access to the head link, you can also provide the trace id:
+
+```java
+AppendLinkInput<Object> appLinkInput = new AppendLinkInput<Object>(YOUR_CONFIG.actionKey, data, traceId);
+TraceState<Object, Object> state =   sdk.appendLink(appLinkInput);
+```
+
+</TabItem>
+
+</Tabs>
+
+You must provide:
+
+- `actionKey`: a valid action key,
+- `data`: the data object corresponding to the action being done,
+- `prevLink` or `traceId`.
+
+The Sdk will return the new state object of the trace. The shape of this object is the same as explained [previously](#creating-a-new-trace).
+
+Notes:
+
+- The `data` object argument must be valid against the JSON schema of the form you are using, otherwise Trace will throw a validation error.
+
+### Trace stages
+
+Your group in the workflow is composed of multiple stages. There are always 3 default stages:
+
+- `Incoming`: this stage lists all the traces that are being transferred to your group (push or pull),
+- `Backlog`: this stage lists all the traces that have been transferred to your group and accepted,
+- `Outgoing`: this stage lists all the traces that are being transferred to another group (push or pull).
+
+The other stages are called `Attestation` stages. They compose the logic of your group in the context of this workflow.
+
+Notes:
+
+- When someone pushes a trace to your group, it will appear in your `Incoming` stage and their `Outgoing` stage.
+- When you accept a transfer, the trace will move to your `Backlog` stage.
+- When you reject a transfer, the trace will move back to its previous `Attestation` stage and disappear from the `Outgoing` and `Incoming` stages it was in.
+
+### Retrieving traces
+
+When all you have is the id of a trace, you can get its state by calling:
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+await sdk.getTraceState({
+  traceId,
+});
+```
+
+The argument:
+
+- `traceId`: the id of the trace
+
+You can also retrieve the links of a given trace this way:
+
+```js
+await sdk.getTraceDetails({
+  traceId,
+  first: 5,
+});
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```cs
+GetTraceStateInput input = new GetTraceStateInput(traceId);
+TraceState<object, object> state = await sdk.GetTraceStateAsync<object>(input);
+```
+
+The argument:
+
+- `traceId`: the id of the trace
+
+You can also retrieve the links of a given trace this way:
+
+```cs
+GetTraceDetailsInput input = new GetTraceDetailsInput(traceId, first, after, last, before);
+TraceDetails<object> details = await sdk.GetTraceDetailsAsync<object>(input);
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+GetTraceStateInput input = new GetTraceStateInput(traceId);
+TraceState<Object, Object> state = sdk.getTraceState<Object>(input);
+```
+
+The argument:
+
+- `traceId`: the id of the trace
+
+You can also retrieve the links of a given trace this way:
+
+```java
+GetTraceDetailsInput input = new GetTraceDetailsInput(traceId, first, after, last, before);
+TraceDetails<Object> details =  sdk.getTraceDetails<Object>(input);
+```
+
+</TabItem>
+
+</Tabs>
+
+In this case, we are asking for the first 5 links (see [pagination](#pagination)).
+
+Arguments:
+
+- `traceId`: the id of the trace,
+- `first`: (optional) retrieve the first n elements,
+- `after`: (optional) retrieve the elements after a certain point,
+- `last`: (optional) retrieve the last n elements,
+- `before`: (optional) retrieve the elements before a certain point.
+
+For more explanation on how the pagination work, go to the dedication [section](#pagination).
+
+The Sdk will return an object with the details about the trace you asked for. This object exposes the following fields:
+
+- `links`: the paginated array of links,
+- `totalCount`: the total number of links in the trace,
+- `info`: a pagination object (more on this [here](#pagination)).
+
+To retrieve all the traces of a given stage, you can:
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+await sdk.getIncomingTraces({
+  first: 10,
+});
+```
+
+Or:
+
+```js
+await sdk.getOutgoingTraces();
+```
+
+Or:
+
+```js
+await sdk.getBacklogTraces();
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```cs
+Sdk<object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(first, after, last, before);
+TracesState<object, object> state = await sdk.GetIncomingTracesAsync<object>(paginationInfo);
+```
+
+Or:
+
+```cs
+Sdk<object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(first, after, last, before);
+TracesState<object, object> state = await sdk.GetOutgoingTracesAsync<object>(paginationInfo);
+```
+
+Or:
+
+```cs
+var sdk = GetSdk();
+PaginationInfo info = new PaginationInfo(first, after, last, before);
+await sdk.GetBacklogTracesAsync<object>(info);
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+Sdk<Object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(first, after, last, before);
+TracesState<Object, Object> state =  sdk.getIncomingTraces<Object>(paginationInfo);
+```
+
+Or:
+
+```java
+ Sdk<Object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(first, after, last, before);
+TracesState<Object, Object> state =  sdk.getOutgoingTraces<Object>(paginationInfo);
+```
+
+Or:
+
+```java
+var sdk = GetSdk();
+PaginationInfo info = new PaginationInfo(first, after, last, before);
+TracesState<Object, Object> state = sdk.GetBacklogTraces<Object>(info);
+```
+
+</TabItem>
+
+</Tabs>
+
+Arguments:
+
+- `first`: (optional) retrieve the first n elements,
+- `after`: (optional) retrieve the elements after a certain point,
+- `last`: (optional) retrieve the last n elements,
+- `before`: (optional) retrieve the elements before a certain point.
+
+For more explanation on how the pagination work, go to the dedication [section](#pagination).
+
+The Sdk will return an object with the traces currently in the given stage. This object exposes the following fields:
+
+- `traces`: the paginated array of traces (trace states actually),
+- `totalCount`: the total number of traces in the trace,
+- `info`: a pagination object (more on this [here](#pagination)).
+
+### Searching for traces
+
+Traces can be searched by tag. So in order to search you must first add a tag to a trace.
+Tags are not unique, so multiple traces can have the same tag. Traces can also have multiple tags.
+
+:warning: All traces containing any one of the provided tags will be returned.
+
+The tag trace arguments look like:
+
+- `traceId`: the id of the trace to add tags too
+- `tags`: array of tags to add to the trace
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+await sdk.addTagsToTrace({
+  traceId: "191516ec-5f8c-4757-9061-8c7ab06cf0a0",
+  tags: ["accepted", "todo"],
+});
+```
+
+Now that there is a trace with a tag we can search for it.
+
+```js
+await sdk.searchTraces(
+  {
+    tags: {
+      overlaps: ["todo", "other tag"],
+    },
+  },
+  {
+    first: 1,
+  }
+);
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```cs
+String traceId = "191516ec-5f8c-4757-9061-8c7ab06cf0a0"
+// Add a tag to a trace
+Guid uuid = System.Guid.NewGuid();
+String randomUUIDString = uuid.ToString();
+AddTagsToTraceInput input = new AddTagsToTraceInput(traceId, new string[] { randomUUIDString });
+TraceState<Object, Object> state = await sdk.AddTagsToTraceAsync<Object>(input);
+```
+
+Now that there is a trace with a tag we can search for it.
+
+```cs
+// search the trace by tags
+List<String> tags = new List<string>();
+tags.Add(randomUUIDString);
+SearchTracesFilter f = new SearchTracesFilter(tags);
+TracesState<Object, Object> res = await sdk.SearchTracesAsync<Object>(f, new PaginationInfo());
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+String traceId = "191516ec-5f8c-4757-9061-8c7ab06cf0a0";
+
+// Add a tag to a trace
+UUID uuid = UUID.randomUUID();
+String randomUUIDString = uuid.toString();
+AddTagsToTraceInput input = new AddTagsToTraceInput();
+input.setTraceId(traceId);
+input.setTags(new String[] { randomUUIDString });
+
+TraceState<Object, Object> t = getSdk().addTagsToTrace(input);
+```
+
+Now that there is a trace with a tag we can search for it.
+
+```java
+// search the trace by tags
+List<String> tags = new ArrayList<String>();
+tags.add(randomUUIDString);
+SearchTracesFilter f = new SearchTracesFilter(tags);
+TracesState<Object, Object> res = sdk.searchTraces(f, new PaginationInfo());
+```
+
+</TabItem>
+
+</Tabs>
+
+Arguments:
+
+- `filter`: specify an array of tags to filter on. All traces containing any one of the provided tags will be returned.
+- `paginationInfo`: pagination arguments, in case there are multiple traces with the provided tags. More info at [pagination](#pagination)
+
+### Pagination
+
+When a method returns an array of elements (traces, links, etc..), it will be paginated. It means that you can provide arguments to specify how many elements to retrieve from which point in the full list. The pagination arguments will always look like:
+
+- `first`: (optional) retrieve the first n elements,
+- `after`: (optional) retrieve the elements after a certain point,
+- `last`: (optional) retrieve the last n elements,
+- `before`: (optional) retrieve the elements before a certain point.
+
+You must use `first` and/or `after` together, `last` and/or `before` together. If you try to retrieve the `first=n before=xyz` the Sdk will throw an error.
+
+In the result object, you will have the `totalCount` and an `info` object that has the following fields:
+
+- `hasNext`: a flag telling if there is a next series of elements to retrieve after this one,
+- `hasPrevious`: a flag telling if there is a previous series of elements to retrieve before this one,
+- `startCursor`: (optional) a cursor (string) representing the position of the first element in this series,
+- `endCursor`: (optional) a cursor (string) representing the position of the last element in this series.
+
+Let's look at a pagination example. We start by retrieving (and consuming) the first 10 incoming traces:
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js' },
+    { label: 'C#', value: 'csharp' },
+    { label: 'Java', value: 'java' },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+let results = await sdk.getIncomingTraces({
+  first: 10,
+});
+
+consume(results.traces);
+```
+
+Next, we look at the pagination info results to know if there are more traces to retrieve:
+
+```js
+if (results.info.hasNext) {
+  results = await sdk.getIncomingTraces({
+    first: 10,
+    after: results.info.endCursor,
+  });
+  consume(results.traces);
+}
+```
+
+In the case there are more traces to retrieve (`hasNext === true`), we call the `getIncomingTraces` method again setting the `after` argument to the `endCursor`. We keep doing this until `hasNext === false`.
+Putting all this together, we can synthetize this in a loop:
+
+```js
+let results;
+do {
+  results = await sdk.getIncomingTraces({
+    first: 10,
+    after: results.info.endCursor,
+  });
+  consume(results.traces);
+} while (results.info.hasNext);
+```
+
+</TabItem>
+<TabItem value="csharp">
+
+```cs
+Sdk<object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(10, null, null, null);
+TracesState<object, object> results = await sdk.GetIncomingTracesAsync<object>(paginationInfo);
+```
+
+Next, we look at the pagination info results to know if there are more traces to retrieve:
+
+```cs
+if (results.Info.HasNext)
+{
+  PaginationInfo paginationInfo = new PaginationInfo(10, results.Info.EndCursor, null, null);
+  TracesState<object, object> results = await sdk.GetIncomingTracesAsync<object>(paginationInfo);
+}
+```
+
+</TabItem>
+<TabItem value="java">
+
+```java
+Sdk<Object> sdk = GetSdk();
+PaginationInfo paginationInfo = new PaginationInfo(10, null, null, null);
+TracesState<Object, Object> results =  sdk.getIncomingTraces<Object>(paginationInfo);
+```
+
+Next, we look at the pagination info results to know if there are more traces to retrieve:
+
+```java
+if (results.Info.HasNext) {
+PaginationInfo paginationInfo = new PaginationInfo(10, results.Info.EndCursor, null, null);
+TracesState<Object, Object> results =  sdk.getIncomingTraces<Object>(paginationInfo);
+}
+```
+
+</TabItem>
+</Tabs>

@@ -6,6 +6,7 @@ module.exports = {
       items: [
         'installation',
         'configuration',
+        'usage',
         'handling-files'
       ],
     },

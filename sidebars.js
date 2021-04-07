@@ -6,7 +6,9 @@ module.exports = {
       items: [
         'installation',
         'configuration',
-        'handling-files'
+        'usage',
+        'handling-files',
+        'deprecated'
       ],
     },
   ],

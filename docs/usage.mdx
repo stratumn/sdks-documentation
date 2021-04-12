@@ -423,10 +423,24 @@ await sdk.addTagsToTrace({
 });
 
 // Now that there is a trace with a tag we can search for it.
+// In order to search for any of the tags provided, use the `overlaps` parameter :
+
 await sdk.searchTraces(
   {
     tags: {
       overlaps: ["todo", "other tag"],
+    },
+  },
+  {
+    first: 1,
+  }
+);
+
+// If you want to search for all tags provided, use the `contains` parameter :
+await sdk.searchTraces(
+  {
+    tags: {
+      contains: ["todo", "accepted"],
     },
   },
   {
@@ -442,15 +456,23 @@ await sdk.searchTraces(
 ```cs
 String traceId = "191516ec-5f8c-4757-9061-8c7ab06cf0a0"
 // Add a tag to a trace
-Guid uuid = System.Guid.NewGuid();
-String randomUUIDString = uuid.ToString();
-AddTagsToTraceInput input = new AddTagsToTraceInput(traceId, new string[] { randomUUIDString });
+AddTagsToTraceInput input = new AddTagsToTraceInput(traceId, new string[] { "todo", "other tag" });
 TraceState<Object, Object> state = await sdk.AddTagsToTraceAsync<Object>(input);
 
 // Now that there is a trace with a tag we can search for it.
+
+// In order to search for any of the tags provided, use the `overlaps` parameter :
 List<String> tags = new List<string>();
-tags.Add(randomUUIDString);
+tags.Add("todo");
+tags.Add("other tag");
 SearchTracesFilter f = new SearchTracesFilter(tags);
+TracesState<Object, Object> res = await sdk.SearchTracesAsync<Object>(f, new PaginationInfo());
+
+// If you want to search for all tags provided, use the `TAGS_CONTAINS` parameter :
+List<String> tags = new List<string>();
+tags.Add("todo");
+tags.Add("other tag");
+SearchTracesFilter f = new SearchTracesFilter(tags, SearchTracesFilter.SEARCH_TYPE.TAGS_CONTAINS);
 TracesState<Object, Object> res = await sdk.SearchTracesAsync<Object>(f, new PaginationInfo());
 ```
 
@@ -462,18 +484,26 @@ TracesState<Object, Object> res = await sdk.SearchTracesAsync<Object>(f, new Pag
 String traceId = "191516ec-5f8c-4757-9061-8c7ab06cf0a0";
 
 // Add a tag to a trace
-UUID uuid = UUID.randomUUID();
-String randomUUIDString = uuid.toString();
 AddTagsToTraceInput input = new AddTagsToTraceInput();
 input.setTraceId(traceId);
-input.setTags(new String[] { randomUUIDString });
+input.setTags(new String[] { "todo", "other tag" });
 
 TraceState<Object, Object> t = getSdk().addTagsToTrace(input);
 
 // Now that there is a trace with a tag we can search for it.
+
+// In order to search for any of the tags provided, use the `overlaps` parameter :
 List<String> tags = new ArrayList<String>();
-tags.add(randomUUIDString);
+tags.add("todo");
+tags.add("other tag");
 SearchTracesFilter f = new SearchTracesFilter(tags);
+TracesState<Object, Object> res = sdk.searchTraces(f, new PaginationInfo());
+
+// If you want to search for all tags provided, use the `TAGS_CONTAINS` parameter :
+List<String> tags = new ArrayList<String>();
+tags.add("todo");
+tags.add("other tag");
+SearchTracesFilter f = new SearchTracesFilter(tags, SearchTracesFilter.SEARCH_TYPE.TAGS_CONTAINS);
 TracesState<Object, Object> res = sdk.searchTraces(f, new PaginationInfo());
 ```
 

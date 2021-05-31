@@ -74,13 +74,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/stratumn/sdks-documentation',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/stratumn/sdks-documentation/edit/master/website/blog/',
+          'https://github.com/stratumn/sdks-documentation/blob/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

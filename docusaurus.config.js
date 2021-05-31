@@ -2,12 +2,12 @@
 module.exports = {
   title: 'SDKs documentation',
   tagline: 'Your critical processes are reliable, simple and efficient',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://stratumn.github.io',
+  baseUrl: '/sdks-documentation/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.jpg',
-  organizationName: 'Stratumn', // Usually your GitHub org/user name.
+  organizationName: 'stratumn', // Usually your GitHub org/user name.
   projectName: 'sdks-documentation', // Usually your repo name.
   themeConfig: {
     navbar: {
@@ -74,13 +74,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/stratumn/sdks-documentation',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/stratumn/sdks-documentation/edit/master/website/blog/',
+          'https://github.com/stratumn/sdks-documentation/blob/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

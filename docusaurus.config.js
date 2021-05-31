@@ -2,12 +2,12 @@
 module.exports = {
   title: 'SDKs documentation',
   tagline: 'Your critical processes are reliable, simple and efficient',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://stratumn.github.io',
+  baseUrl: '/sdks-documentation/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.jpg',
-  organizationName: 'Stratumn', // Usually your GitHub org/user name.
+  organizationName: 'stratumn', // Usually your GitHub org/user name.
   projectName: 'sdks-documentation', // Usually your repo name.
   themeConfig: {
     navbar: {

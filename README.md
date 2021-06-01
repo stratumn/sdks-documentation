@@ -1,6 +1,8 @@
 # sdks-documentation
 
-This website is built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
+Built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
+
+Check out our [website](https://stratumn.github.io/sdks-documentation/) for a complete explanation and documentation.
 
 ## Installation
 

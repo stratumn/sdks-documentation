@@ -1,0 +1,29 @@
+---
+title: ✅ Required lanquage version
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## What is the minimum required version
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+You will need at least es6
+</TabItem>
+<TabItem value="csharp">
+.NET Standard >= 2.0
+</TabItem>
+<TabItem value="java">
+Java >= 8
+</TabItem>
+</Tabs>

@@ -18,9 +18,15 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/installation',
-          activeBasePath: 'docs',
+          to: 'docs/configuration/installation',
+          activeBasePath: 'docs/configuration',
           label: 'Docs',
+          position: 'left',
+        },
+        {
+          to: 'docs/faq/required_version',
+          activeBasePath: 'docs/faq',
+          label: 'FAQ',
           position: 'left',
         }
       ],

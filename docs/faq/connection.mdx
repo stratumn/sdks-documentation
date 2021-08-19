@@ -1,0 +1,112 @@
+---
+title: 🔑 Connection issue
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## I’m having trouble connecting to Trace / Bad request error
+
+If the error is related to configuration, the SDK will display errors details in the exception.
+
+### If the private key is incorrect
+
+You will get the following error
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```sh
+
+Too few bytes to read ASN.1 value.
+
+  private async loginWithSigningPrivateKey(key: string) {
+  // create a SigningPrivateKey object with the one provided
+  const signingPrivateKey = new sig.SigningPrivateKey({ pemPrivateKey: key });
+
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```sh
+
+Unhandled exception. System.AggregateException: One or more errors occurred. (base64 data appears to be truncated)
+---> System.IO.IOException: base64 data appears to be truncated
+at Org.BouncyCastle.Utilities.IO.Pem.PemReader.LoadObject(String type) in /\_/crypto/src/util/io/pem/PemReader.cs:line 93
+at Org.BouncyCastle.Utilities.IO.Pem.PemReader.ReadPemObject() in /\_/crypto/src/util/io/pem/PemReader.cs:line 47
+at Utils.CryptoUtils.DecodeEd25519PrivateKey(String pem)
+at Stratumn.Sdk.Client.GetBearerToken(String pem)
+at Stratumn.Sdk.Client.LoginWithSigningPrivateKey(String pem)
+at Stratumn.Sdk.Client.Login()
+
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```sh
+
+com.stratumn.sdk.TraceSdkException: Login with private key failed
+
+```
+
+</TabItem>
+</Tabs>
+
+If your key is stored in a database :
+
+- you have to store it with all line breaks (including the one at the end of the key)
+- you might have to replace lines breaks
+
+<Tabs
+groupId="choosen-language"
+  defaultValue="js"
+  values={[
+    { label: 'JavaScript', value: 'js', },
+    { label: 'C#', value: 'csharp', },
+    { label: 'Java', value: 'java', },
+  ]}
+>
+
+<TabItem value="js">
+
+```js
+
+key.replace(/\\n/g, '\n') },
+
+```
+
+</TabItem>
+
+<TabItem value="csharp">
+
+```csharp
+
+key.Replace("\\n", "\n");
+
+```
+
+</TabItem>
+
+<TabItem value="java">
+
+```java
+
+key.replaceAll("\\\\n", "\n");
+
+```
+
+</TabItem>
+</Tabs>

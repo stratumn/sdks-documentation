@@ -73,7 +73,8 @@ var sdk = new Sdk({
 });
 ```
 
-By default the `Sdk` is configured to point to the production environment of Trace. During a development phase, you can configure the `Sdk` to point to the staging environment:
+By default the `Sdk` is configured to point to the production environment of Trace.
+During a development phase, you can configure the `Sdk` to point to the staging environment:
 
 ```js
 var sdk = new Sdk({
@@ -84,6 +85,34 @@ var sdk = new Sdk({
     account: "https://account-api.staging.stratumn.com",
     media: "https://media-api.staging.stratumn.com",
   },
+});
+```
+
+- To enable low level http debuging set the enableDebugging option to true :
+
+```js
+enableDebugging: true;
+```
+
+- If the bot you are using belongs to multiple groups, you have to define the group label :
+
+```js
+groupLabel: "groupLabel";
+```
+
+Which would look like :
+
+```js
+var sdk = new Sdk({
+  workflowId: YOUR_CONFIG.workflowId,
+  secret: { privateKey: YOUR_SECRETS.privateKey },
+  endpoints: {
+    trace: "https://trace-api.staging.stratumn.com",
+    account: "https://account-api.staging.stratumn.com",
+    media: "https://media-api.staging.stratumn.com",
+  },
+  groupLabel: "groupLabel",
+  enableDebugging: true,
 });
 ```
 
@@ -115,7 +144,7 @@ opts.Endpoints = new Endpoints {
 };
 ```
 
-- To enable low level http debuging set the enableDebugging option to true;
+- To enable low level http debuging set the enableDebugging option to true :
 
 ```cs
 opts.setEnableDebuging(true);
@@ -125,6 +154,12 @@ opts.setEnableDebuging(true);
 
 ```cs
 opts.setProxy("MyProxyHost", 1234);
+```
+
+- If the bot you are using belongs to multiple groups, you have to define the group label :
+
+```cs
+opts.GroupLabel = "groupLabel";
 ```
 
 Finally to create the sdk instance:
@@ -167,6 +202,12 @@ opts.setEnableDebuging(true);
 
 ```java
 opts.setProxy("MyProxyHost", 1234);
+```
+
+- If the bot you are using belongs to multiple groups, you have to define the group label :
+
+```java
+opts.setGroupLabel("groupLabel");
 ```
 
 Finally to create the sdk instance:

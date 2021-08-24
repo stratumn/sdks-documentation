@@ -176,22 +176,6 @@ Notes:
 
 - The `data` object argument must be valid against the JSON schema of the form you are using, otherwise Trace will throw a validation error.
 
-### Trace stages
-
-Your group in the workflow is composed of multiple stages. There are always 3 default stages:
-
-- `Incoming`: this stage lists all the traces that are being transferred to your group (push or pull),
-- `Backlog`: this stage lists all the traces that have been transferred to your group and accepted,
-- `Outgoing`: this stage lists all the traces that are being transferred to another group (push or pull).
-
-The other stages are called `Attestation` stages. They compose the logic of your group in the context of this workflow.
-
-Notes:
-
-- When someone pushes a trace to your group, it will appear in your `Incoming` stage and their `Outgoing` stage.
-- When you accept a transfer, the trace will move to your `Backlog` stage.
-- When you reject a transfer, the trace will move back to its previous `Attestation` stage and disappear from the `Outgoing` and `Incoming` stages it was in.
-
 ### Retrieving traces
 
 When all you have is the id of a trace, you can get its state by calling:

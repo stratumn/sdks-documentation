@@ -1,0 +1,49 @@
+---
+title: ❌ Error during an action
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## Action not allowed at one stage of the workflow
+
+If an action is not allowed at one point of the workflow, you will get an error like :
+
+```json
+{
+  "errors": [
+    {
+      "message": "action \"actionName\" not in next actions of \"groupName\"",
+      "locations": [{ "line": 2, "column": 17 }],
+      "path": ["createLink"],
+      "status": 400
+    }
+  ],
+  "data": { "createLink": null }
+}
+```
+
+In that case, you should verify if the action you are trying to perform should be done at this stage of the workflow,
+and by the group you are trying to perform the action with.
+If so, please contact the Stratum's support team.
+
+## If the form data does not match the expected data
+
+In that case, you will get an error like :
+
+```json
+{
+  "errors": [
+    {
+      "message": "Form data is not valid: [ should have required property propertyName]",
+      "locations": [{ "line": 2, "column": 17 }],
+      "path": ["createLink"],
+      "status": 400
+    }
+  ],
+  "data": { "createLink": null }
+}
+```
+
+In that case, you should verify the specifications to check that the data you're sending is correct.
+If so, please contact the Stratum's support team.

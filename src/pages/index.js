@@ -72,7 +72,7 @@ export default function Home() {
                 'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={useBaseUrl('docs/installation')}>
+              to={useBaseUrl('docs/configuration/installation')}>
               Get Started
             </Link>
           </div>

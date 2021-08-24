@@ -39,15 +39,15 @@ module.exports = {
           items: [
             {
               label: '📡 Installing',
-              to: 'docs/installation',
+              to: 'docs/configuration/installation',
             },
             {
               label: '🚀 Usage and Getting Started',
-              to: 'docs/configuration',
+              to: 'docs/configuration/usage',
             },
             {
               label: '💾 Handling files',
-              to: 'docs/handling-files',
+              to: 'docs/configuration/handling-files',
             },
           ],
         },
